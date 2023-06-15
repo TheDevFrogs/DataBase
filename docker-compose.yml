@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  db:
+    container_name: bd-projet
+    image: postgres:15
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init_db/sql:/docker-entrypoint-initdb.d/
+    networks:
+      acad-net:
+
+networks:
+  acad-net:
