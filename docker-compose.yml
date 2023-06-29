@@ -10,7 +10,9 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./init_db/sql:/docker-entrypoint-initdb.d/
+      - ./initdb/01-database.sql:/docker-entrypoint-initdb.d/01-database.sql
+      - ./initdb/02-data.sql:/docker-entrypoint-initdb.d/02-data.sql
+      - ./initdb/03-views.sql:/docker-entrypoint-initdb.d/03-views.sql
     networks:
       acad-net:
 
