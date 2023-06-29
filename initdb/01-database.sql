@@ -59,8 +59,6 @@ CREATE TABLE Groupe
 CREATE TABLE Member
 (
     cip VARCHAR NOT NULL,
-    first_name VARCHAR NOT NULL,
-    last_name VARCHAR NOT NULL,
     PRIMARY KEY (cip)
 );
 
