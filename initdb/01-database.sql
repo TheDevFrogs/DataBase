@@ -11,48 +11,33 @@ CREATE TABLE Session
 );
 
 
--- Creation de la table Class pour les cours
 CREATE TABLE Class
 (
-    id_class SERIAL NOT NULL,
-    name VARCHAR NOT NULL,
+    id_class VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
     PRIMARY KEY (id_class)
 );
 
-
--- Creation de la table SessionClass pour associer les cours a chaque session
+-- Creation de la table Class pour les cours
 CREATE TABLE SessionClass
 (
     id_session INT NOT NULL,
-    id_class INT NOT NULL,
+    id_class VARCHAR NOT NULL,
+    PRIMARY KEY (id_class, id_session),
     FOREIGN KEY (id_session) REFERENCES Session(id_session),
     FOREIGN KEY (id_class) REFERENCES Class(id_class)
 );
-
-
--- Creation de la table noGroup pour le nom des numeros de groupe
-CREATE TABLE NoGroup
-(
-    id_noGroup SERIAL NOT NULL,
-    no_group VARCHAR NOT NULL,
-    name VARCHAR NOT NULL,
-    PRIMARY KEY (id_noGroup)
-);
-
 
 -- Creation de la table Groupe pour la création des groupe Session-cours-numero de groupe
 CREATE TABLE Groupe
 (
     id_group SERIAL NOT NULL,
-    id_class INT NOT NULL,
     id_session INT NOT NULL,
-    id_noGroup INT NOT NULL,
+    id_class VARCHAR NOT NULL,
+    no_group INT NOT NULL,
     PRIMARY KEY (id_group),
-    FOREIGN KEY (id_class) REFERENCES Class(id_class),
-    FOREIGN KEY (id_session) REFERENCES Session(id_session),
-    FOREIGN KEY (id_noGroup) REFERENCES NoGroup(id_noGroup)
- );
+    FOREIGN KEY (id_class, id_session) REFERENCES SessionClass(id_class, id_session)
+);
 
 
 -- Creation de la table Member pour la liste des membres
@@ -99,24 +84,14 @@ CREATE TABLE Assignment
     FOREIGN KEY (id_group) REFERENCES Groupe(id_group)
 );
 
-
--- Creation de la table NomEquipe
-CREATE TABLE NomEquipe
-(
-    id_nomEquipe SERIAL NOT NULL,
-    name VARCHAR NOT NULL,
-    PRIMARY KEY (id_nomEquipe)
-);
-
 -- Creation de la table Team pour la creation des equipes
 CREATE TABLE Team
 (
     id_team SERIAL NOT NULL,
     id_assignment INT NOT NULL,
-    id_nomEquipe INT NOT NULL ,
+    no_equipe INT NOT NULL ,
     PRIMARY KEY (id_team),
-    FOREIGN KEY (id_assignment) REFERENCES Assignment(id_assignment),
-    FOREIGN KEY (id_nomEquipe) REFERENCES NomEquipe(id_nomEquipe)
+    FOREIGN KEY (id_assignment) REFERENCES Assignment(id_assignment)
 );
 
 
