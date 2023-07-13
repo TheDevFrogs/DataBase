@@ -25,7 +25,7 @@ SELECT s.name as SessionNom, r.name as RoleName, gm.cip as Cip
 
 -- View get the class list of a student at a particular session with the list of assignment for each course.
 CREATE VIEW StudentClass AS
-SELECT class.description AS ClassDescription, s2.path AS Session, g2.cip AS CIP, a.id_group, a.name AS AssignmentName, a.due_date, a.close_date, a.available_date
+SELECT a.id_assignment, a.description, class.description AS ClassDescription, s2.path AS Session, g2.cip AS CIP, a.id_group, a.name AS AssignmentName, a.due_date, a.close_date, a.available_date
 FROM class
 INNER JOIN sessionclass s on class.id_class = s.id_class
 INNER JOIN session s2 on s2.id_session = s.id_session
