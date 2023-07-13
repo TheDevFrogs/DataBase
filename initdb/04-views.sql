@@ -9,4 +9,3 @@ SELECT s.name as SessionNom, r.name as RoleName, gm.cip as Cip
 		INNER JOIN groupmember gm on g.id_group = gm.id_group
 		INNER JOIN role r on gm.id_role = r.id_role
 			group by s.name, r.name, gm.cip
-

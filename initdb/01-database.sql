@@ -10,7 +10,6 @@ CREATE TABLE Session
     PRIMARY KEY (id_session)
 );
 
-
 CREATE TABLE Class
 (
     id_class VARCHAR NOT NULL,
@@ -25,7 +24,9 @@ CREATE TABLE SessionClass
     id_class VARCHAR NOT NULL,
     PRIMARY KEY (id_class, id_session),
     FOREIGN KEY (id_session) REFERENCES Session(id_session),
-    FOREIGN KEY (id_class) REFERENCES Class(id_class)
+    FOREIGN KEY (id_class) REFERENCES Class(id_class),
+    --La meme classe ne peut pas etre presente deux fois dans la meme session
+    CONSTRAINT unique_sessionclass UNIQUE (id_session, id_class)
 );
 
 -- Creation de la table Groupe pour la création des groupe Session-cours-numero de groupe
@@ -36,7 +37,9 @@ CREATE TABLE Groupe
     id_class VARCHAR NOT NULL,
     no_group INT NOT NULL,
     PRIMARY KEY (id_group),
-    FOREIGN KEY (id_class, id_session) REFERENCES SessionClass(id_class, id_session)
+    FOREIGN KEY (id_class, id_session) REFERENCES SessionClass(id_class, id_session),
+    --Deux groupes ne peuvent pas etre pareil
+    CONSTRAINT unique_group UNIQUE (id_session, id_class, no_group)
 );
 
 
@@ -44,6 +47,8 @@ CREATE TABLE Groupe
 CREATE TABLE Member
 (
     cip VARCHAR NOT NULL,
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR NOT NULL,
     PRIMARY KEY (cip)
 );
 
