@@ -5,6 +5,7 @@ CREATE TABLE Session
 (
     id_session SERIAL NOT NULL,
     name VARCHAR NOT NULL,
+    path VARCHAR NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     PRIMARY KEY (id_session)
