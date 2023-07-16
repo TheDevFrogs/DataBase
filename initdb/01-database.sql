@@ -18,17 +18,6 @@ CREATE TABLE Class
     PRIMARY KEY (id_class)
 );
 
--- Creation de la table Class pour les cours
-CREATE TABLE SessionClass
-(
-    id_session INT NOT NULL,
-    id_class VARCHAR NOT NULL,
-    PRIMARY KEY (id_class, id_session),
-    FOREIGN KEY (id_session) REFERENCES Session(id_session),
-    FOREIGN KEY (id_class) REFERENCES Class(id_class),
-    --La meme classe ne peut pas etre presente deux fois dans la meme session
-    CONSTRAINT unique_sessionclass UNIQUE (id_session, id_class)
-);
 
 -- Creation de la table Groupe pour la création des groupe Session-cours-numero de groupe
 CREATE TABLE Groupe
@@ -38,7 +27,8 @@ CREATE TABLE Groupe
     id_class VARCHAR NOT NULL,
     no_group INT NOT NULL,
     PRIMARY KEY (id_group),
-    FOREIGN KEY (id_class, id_session) REFERENCES SessionClass(id_class, id_session),
+    FOREIGN KEY (id_session) REFERENCES Session(id_session),
+    FOREIGN KEY (id_class) REFERENCES Class(id_class),
     --Deux groupes ne peuvent pas etre pareil
     CONSTRAINT unique_group UNIQUE (id_session, id_class, no_group)
 );
@@ -74,6 +64,14 @@ CREATE TABLE GroupMember
     FOREIGN KEY (id_role) REFERENCES Role(id_role)
 );
 
+-- Creation de la table File pour la liste des fichiers
+CREATE TABLE File
+(
+    id_file SERIAL NOT NULL,
+    path VARCHAR NOT NULL,
+    name VARCHAR NOT NULL,
+    PRIMARY KEY (id_file)
+);
 
 -- Creation de la table Assignment pour la liste des travaux
 CREATE TABLE Assignment
@@ -86,8 +84,10 @@ CREATE TABLE Assignment
     close_date TIMESTAMP NOT NULL,
     available_date TIMESTAMP NOT NULL,
     team_size INT NOT NULL,
+    id_file INT,
     PRIMARY KEY (id_assignment),
-    FOREIGN KEY (id_group) REFERENCES Groupe(id_group)
+    FOREIGN KEY (id_group) REFERENCES Groupe(id_group),
+    FOREIGN KEY (id_file) REFERENCES File(id_file)
 );
 
 -- Creation de la table Team pour la creation des equipes
@@ -97,7 +97,9 @@ CREATE TABLE Team
     id_assignment INT NOT NULL,
     no_equipe INT NOT NULL ,
     PRIMARY KEY (id_team),
-    FOREIGN KEY (id_assignment) REFERENCES Assignment(id_assignment)
+    FOREIGN KEY (id_assignment) REFERENCES Assignment(id_assignment),
+    CONSTRAINT unique_team UNIQUE (id_assignment, no_equipe)
+    
 );
 
 
@@ -110,36 +112,6 @@ CREATE TABLE TeamMember
     FOREIGN KEY (id_team) REFERENCES Team(id_team)
 );
 
-
--- Creation de la table File pour la liste des fichiers
-CREATE TABLE File
-(
-    id_file SERIAL NOT NULL,
-    path VARCHAR NOT NULL,
-    name VARCHAR NOT NULL,
-    PRIMARY KEY (id_file)
-);
-
-
--- Creation de la table AssignmentFile qui associe des fichiers aux travaux
-CREATE TABLE AssignmentFile
-(
-    id_assignment INT NOT NULL,
-    id_file INT NOT NULL,
-    FOREIGN KEY (id_assignment) REFERENCES Assignment(id_assignment),
-    FOREIGN KEY (id_file) REFERENCES File(id_file)
-);
-
-
--- Creation de la table TypeRemise pour savoir si la remise d'un fichier est fait par qui (enseignant etudiant, etc.)
-CREATE TABLE TypeRemise
-(
-    id_typeRemise SERIAL NOT NULL,
-    name VARCHAR NOT NULL,
-    PRIMARY KEY (id_typeRemise)
-);
-
-
 -- Creation de la table HandedAssignment pour les fichiers remis
 CREATE TABLE HandedAssignment
 (
@@ -147,9 +119,17 @@ CREATE TABLE HandedAssignment
     id_team INT NOT NULL,
     id_file INT NOT NULL,
     handed_date TIMESTAMP NOT NULL,
-    id_typeRemise INT NOT NULL,
     PRIMARY KEY (id_handedAssignment),
     FOREIGN KEY (id_team) REFERENCES Team(id_team),
-    FOREIGN KEY (id_file) REFERENCES File(id_file),
-    FOREIGN KEY (id_typeRemise) REFERENCES TypeRemise(id_typeRemise)
+    FOREIGN KEY (id_file) REFERENCES File(id_file)
+);
+
+CREATE TABLE AssignmentCorrection
+(
+	id_assignmentCorrection SERIAL NOT NULL,
+	id_handedAssignment INT NOT NULL,
+	id_file INT NOT NULL,
+	PRIMARY KEY (id_assignmentCorrection),
+	FOREIGN KEY (id_handedAssignment) REFERENCES HandedAssignment(id_handedAssignment),
+	FOREIGN KEY (id_file) REFERENCES File(id_file)
 );
