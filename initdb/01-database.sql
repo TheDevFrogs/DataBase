@@ -70,6 +70,8 @@ CREATE TABLE File
     id_file SERIAL NOT NULL,
     path VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
+    extension VARCHAR, --TODO AJOUER NOT NULL QUAND PRET
+    displayed_name VARCHAR,--TODO AJOUTER NOT NULL QUAND PRET
     PRIMARY KEY (id_file)
 );
 
@@ -127,9 +129,12 @@ CREATE TABLE HandedAssignment
 CREATE TABLE AssignmentCorrection
 (
 	id_assignmentCorrection SERIAL NOT NULL,
-	id_handedAssignment INT NOT NULL,
+	id_assignment INT NOT NULL,
+	id_team INT NOT NULL,
 	id_file INT NOT NULL,
+	corrected_date TIMESTAMP NOT NULL,
 	PRIMARY KEY (id_assignmentCorrection),
-	FOREIGN KEY (id_handedAssignment) REFERENCES HandedAssignment(id_handedAssignment),
+	FOREIGN KEY (id_assignment) REFERENCES Assignment(id_assignment),
+	FOREIGN KEY (id_team) REFERENCES Team(id_team),	
 	FOREIGN KEY (id_file) REFERENCES File(id_file)
 );
