@@ -23,8 +23,33 @@ BEGIN
 END
 $$;
 
+CREATE OR REPLACE FUNCTION trigger_insertion_team()
+    RETURNS TRIGGER
+    LANGUAGE PLPGSQL
+AS
+$$
+BEGIN
+    NEW.NO_EQUIPE = (SELECT COALESCE( 
+    (SELECT t.no_equipe
+    FROM team as t
+    WHERE t.id_assignment = NEW.id_assignment
+    ORDER BY t.no_equipe DESC
+    LIMIT 1),0) + 1);
+
+    RETURN NEW;
+END
+$$;
+
+
+
 CREATE TRIGGER groupmember_insert
     BEFORE INSERT
     ON GroupMember
     FOR EACH ROW
 EXECUTE PROCEDURE trigger_insertion_groupmember();
+
+CREATE TRIGGER groupmember_insert
+    BEFORE INSERT
+    ON Team
+    FOR EACH ROW
+EXECUTE PROCEDURE trigger_insertion_team();

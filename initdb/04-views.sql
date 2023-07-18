@@ -15,8 +15,14 @@ CREATE VIEW GroupMemberAndInformations as
     INNER JOIN groupe as g on g.id_group = gm.id_group
     INNER JOIN session s on g.id_session = s.id_session
     INNER JOIN role as r on r.id_role = gm.id_role
-    INNER JOIN class c on g.id_class = c.id_class
+    INNER JOIN class c on g.id_class = c.id_class;
     
+    
+    
+CREATE VIEW AvailableAssignment as
+	SELECT *
+	FROM assignment
+	WHERE is_deleted = false;
 --CREATE VIEW Equipe as
 --SELECT tm.id_team as idEquipe, ne.name as NomDequipe, s.id_session as session, g.id_group as groupe, --t.id_assignment as assignement,  m.cip as Cip
 --FROM member AS m

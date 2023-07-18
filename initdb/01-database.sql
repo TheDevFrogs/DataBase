@@ -87,6 +87,7 @@ CREATE TABLE Assignment
     available_date TIMESTAMP NOT NULL,
     team_size INT NOT NULL,
     id_file INT,
+    is_deleted BOOL DEFAULT false NOT NULL,
     PRIMARY KEY (id_assignment),
     FOREIGN KEY (id_group) REFERENCES Groupe(id_group),
     FOREIGN KEY (id_file) REFERENCES File(id_file)
