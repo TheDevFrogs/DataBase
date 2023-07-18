@@ -45,3 +45,16 @@ CREATE VIEW AvailableAssignment as
 --INNER JOIN groupe g on class.id_class = g.id_class
 --INNER JOIN groupmember g2 on g.id_group = g2.id_group
 --INNER JOIN assignment a on g.id_group = a.id_group;
+
+
+-- Assignment file informations view
+CREATE VIEW AssignmentFileInfos AS
+SELECT f.id_file AS id_file, f.name AS file_name, f.extension AS file_extension, f.path AS file_path,
+       a.id_assignment AS id_assignment, a.name AS assignment_name, s.id_session AS id_session,
+       s.name AS session_name, c.id_class AS id_class, c.description AS class_name
+FROM file AS f
+INNER JOIN assignment a on f.id_file = a.id_file
+INNER JOIN groupe g on a.id_group = g.id_group
+INNER JOIN groupmember g2 on g.id_group = g2.id_group
+INNER JOIN session s on s.id_session = g.id_session
+INNER JOIN class c on g.id_class = c.id_class;
